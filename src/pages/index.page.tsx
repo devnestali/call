@@ -1,7 +1,5 @@
 import { Heading } from '@devnestali-call-ui/react'
 
 export default function Home() {
-    return (
-        <Heading as="h1">Hello World</Heading>
-    )
+  return <Heading as="h1">Hello World</Heading>
 }
