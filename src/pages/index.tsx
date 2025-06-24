@@ -1,5 +1,7 @@
-import type { AppProps } from 'next/app'
+import { Heading } from '@devnestali-call-ui/react'
 
-export default function App({ Component, pageProps}: AppProps) {
-    return <Component {...pageProps}/>
+export default function Home() {
+    return (
+        <Heading as="h1">Hello World</Heading>
+    )
 }
