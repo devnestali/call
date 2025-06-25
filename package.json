@@ -9,8 +9,9 @@
     "lint": "next lint --fix"
   },
   "dependencies": {
-    "@devnestali-call-ui/react": "^2.2.1",
+    "@devnestali-call-ui/react": "^2.2.3",
     "next": "15.3.4",
+    "phosphor-react": "^1.4.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
