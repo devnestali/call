@@ -12,6 +12,7 @@
     "@devnestali-call-ui/react": "^2.2.3",
     "@hookform/resolvers": "^5.1.1",
     "@prisma/client": "^6.10.1",
+    "axios": "^1.10.0",
     "next": "15.3.4",
     "phosphor-react": "^1.4.1",
     "react": "^19.0.0",
