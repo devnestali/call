@@ -9,7 +9,7 @@
     "lint": "next lint --fix"
   },
   "dependencies": {
-    "@devnestali-call-ui/react": "^2.2.3",
+    "@devnestali-call-ui/react": "^2.2.5",
     "@hookform/resolvers": "^5.1.1",
     "@prisma/client": "^6.10.1",
     "axios": "^1.10.0",
