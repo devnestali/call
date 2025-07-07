@@ -9,6 +9,10 @@ declare module 'next-auth' {
     avatar_url: string
   }
 
+  interface Session {
+    user: User
+  }
+
   interface Account {
     id: string
     user_id: string
