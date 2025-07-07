@@ -14,6 +14,12 @@ const eslintConfig = [
     ignores: ['**/*.d.ts'],
   },
   ...compat.extends('next/core-web-vitals', '@rocketseat/eslint-config/react'),
+
+  {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
 ]
 
 export default eslintConfig

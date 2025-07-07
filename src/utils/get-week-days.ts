@@ -4,7 +4,7 @@ export function getWeekDays() {
   })
 
   return Array.from(Array(7).keys())
-    .map((day) => formatter.format(new Date(Date.UTC(2025, 6, day))))
+    .map((day) => formatter.format(new Date(Date.UTC(2025, 5, day))))
     .map((weekDay) => {
       return weekDay.substring(0, 1).toUpperCase().concat(weekDay.substring(1))
     })
