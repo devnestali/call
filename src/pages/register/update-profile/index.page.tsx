@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Button,
   Heading,
   MultiStep,
@@ -15,6 +16,8 @@ import { useSession } from 'next-auth/react'
 import { GetServerSideProps } from 'next'
 import { getServerSession } from 'next-auth'
 import { buildNextAuthOptions } from '@/pages/api/auth/[...nextauth].api'
+import { api } from '@/lib/axios'
+import { useRouter } from 'next/router'
 
 const updateProfileSchema = z.object({
   bio: z.string(),
@@ -32,10 +35,14 @@ export default function UpdateProfile() {
   })
 
   const session = useSession()
-  console.log(session)
+  const router = useRouter()
 
   async function handleUpdateProfile(data: UpdateProfileFormData) {
-    console.log(data)
+    await api.put('users/profile', {
+      bio: data.bio,
+    })
+
+    await router.push(`/schedule/${session.data?.user.username}`)
   }
 
   return (
@@ -52,6 +59,8 @@ export default function UpdateProfile() {
       <ProfileBox as="form" onSubmit={handleSubmit(handleUpdateProfile)}>
         <label>
           <Text size="sm">Foto de perfil</Text>
+          {/* @ts-expect-error: the src prop exists on Avatar component */}
+          <Avatar src={session.data?.user.avatar_url} alt="" />
         </label>
 
         <label>
