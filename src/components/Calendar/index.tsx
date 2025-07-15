@@ -5,6 +5,7 @@ import {
   CalendarHeader,
   CalendarTitle,
   CalendarBody,
+  CalendarDay,
 } from './styles'
 import { getWeekDays } from '@/utils/get-week-days'
 
@@ -42,9 +43,15 @@ export function Calendar() {
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>
+              <CalendarDay>1</CalendarDay>
+            </td>
+            <td>
+              <CalendarDay disabled>2</CalendarDay>
+            </td>
+            <td>
+              <CalendarDay>3</CalendarDay>
+            </td>
           </tr>
         </tbody>
       </CalendarBody>
