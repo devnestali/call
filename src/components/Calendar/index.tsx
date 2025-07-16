@@ -8,6 +8,7 @@ import {
   CalendarDay,
 } from './styles'
 import { getWeekDays } from '@/utils/get-week-days'
+import { Tooltip } from '@devnestali-call-ui/react'
 
 export function Calendar() {
   const shortWeekDays = getWeekDays({ short: true })
@@ -44,13 +45,19 @@ export function Calendar() {
             <td></td>
             <td></td>
             <td>
-              <CalendarDay>1</CalendarDay>
+              <Tooltip date="1 de Julio" disponibility="Disponíble">
+                <CalendarDay>1</CalendarDay>
+              </Tooltip>
             </td>
             <td>
-              <CalendarDay disabled>2</CalendarDay>
+              <Tooltip date="1 de Julio" disponibility="Indisponíble">
+                <CalendarDay disabled>2</CalendarDay>
+              </Tooltip>
             </td>
             <td>
-              <CalendarDay>3</CalendarDay>
+              <Tooltip date="1 de Julio" disponibility="Indisponíble">
+                <CalendarDay>3</CalendarDay>
+              </Tooltip>
             </td>
           </tr>
         </tbody>
