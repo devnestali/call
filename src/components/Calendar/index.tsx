@@ -9,8 +9,18 @@ import {
 } from './styles'
 import { getWeekDays } from '@/utils/get-week-days'
 import { Tooltip } from '@devnestali-call-ui/react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import dayjs from 'dayjs'
+
+interface CalendarWeek {
+  week: number
+  days: Array<{
+    date: dayjs.Dayjs
+    disabled: boolean
+  }>
+}
+
+type CalendarWeeks = CalendarWeek[]
 
 export function Calendar() {
   const [currentDate, setCurrentDate] = useState(() => {
@@ -33,6 +43,64 @@ export function Calendar() {
 
   const currentMonth = currentDate.format('MMMM')
   const currentYear = currentDate.format('YYYY')
+
+  const calendarWeeks = useMemo(() => {
+    const daysInMonthArray = Array.from({
+      length: currentDate.daysInMonth(),
+    }).map((_, i) => {
+      return currentDate.set('date', i + 1)
+    })
+
+    const firstWeekDay = currentDate.get('day')
+
+    const previousMonthFillArray = Array.from({ length: firstWeekDay })
+      .map((_, i) => {
+        return currentDate.subtract(i + 1, 'day')
+      })
+      .reverse()
+
+    const lastDayInCurrentMonth = currentDate.set(
+      'date',
+      currentDate.daysInMonth(),
+    )
+    const lastWeekDay = lastDayInCurrentMonth.get('day')
+
+    const nextMonthFillArray = Array.from({
+      length: 7 - (lastWeekDay + 1),
+    }).map((_, i) => {
+      return lastDayInCurrentMonth.add(i + 1, 'day')
+    })
+
+    const calendarDays = [
+      ...previousMonthFillArray.map((date) => {
+        return { date, disabled: true }
+      }),
+      ...daysInMonthArray.map((date) => {
+        return { date, disabled: false }
+      }),
+      ...nextMonthFillArray.map((date) => {
+        return { date, disabled: true }
+      }),
+    ]
+
+    const calendarWeeks = calendarDays.reduce<CalendarWeeks>(
+      (weeks, _, i, original) => {
+        const isNewWeek = i % 7 === 0
+
+        if (isNewWeek) {
+          weeks.push({
+            week: i / 7 + 1,
+            days: original.slice(i, i + 7),
+          })
+        }
+
+        return weeks
+      },
+      [],
+    )
+
+    return calendarWeeks
+  }, [currentDate])
 
   return (
     <CalendarContainer>
@@ -60,27 +128,24 @@ export function Calendar() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-              <Tooltip date="1 de Julio" disponibility="Disponíble">
-                <CalendarDay>1</CalendarDay>
-              </Tooltip>
-            </td>
-            <td>
-              <Tooltip date="1 de Julio" disponibility="Indisponíble">
-                <CalendarDay disabled>2</CalendarDay>
-              </Tooltip>
-            </td>
-            <td>
-              <Tooltip date="1 de Julio" disponibility="Indisponíble">
-                <CalendarDay>3</CalendarDay>
-              </Tooltip>
-            </td>
-          </tr>
+          {calendarWeeks.map(({ week, days }) => {
+            return (
+              <tr key={week}>
+                {days.map(({ date, disabled }) => (
+                  <td key={date.toString()}>
+                    <Tooltip
+                      date={date.format('DD [de] MMMM')}
+                      disponibility={disabled ? 'Indisponíble' : 'Disponíble'}
+                    >
+                      <CalendarDay disabled={disabled}>
+                        {date.get('date')}
+                      </CalendarDay>
+                    </Tooltip>
+                  </td>
+                ))}
+              </tr>
+            )
+          })}
         </tbody>
       </CalendarBody>
     </CalendarContainer>
