@@ -12,6 +12,7 @@
     "@devnestali-call-ui/react": "^2.2.11",
     "@hookform/resolvers": "^5.1.1",
     "@prisma/client": "^6.10.1",
+    "@tanstack/react-query": "^5.83.0",
     "axios": "^1.10.0",
     "dayjs": "^1.11.13",
     "next": "15.3.4",
