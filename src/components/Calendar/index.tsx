@@ -32,6 +32,7 @@ interface CalendarProps {
 
 interface BlockedDates {
   blockedWeekDays: number[]
+  blockedDates: number[]
 }
 
 export function Calendar({ selectedDate, onDateSelected }: CalendarProps) {
@@ -60,20 +61,17 @@ export function Calendar({ selectedDate, onDateSelected }: CalendarProps) {
   const currentMonth = currentDate.format('MMMM')
   const currentYear = currentDate.format('YYYY')
 
-  const currentMonthInNumberFormat = currentDate.get('month')
-  const currentYearInNumberFormat = currentDate.get('year')
-
   const { data: blockedDates } = useQuery<BlockedDates>({
     queryKey: [
       'blocked-dates',
-      currentMonthInNumberFormat,
-      currentYearInNumberFormat,
+      currentDate.get('month'),
+      currentDate.get('year'),
     ],
     queryFn: async () => {
       const response = await api.get(`/users/${username}/blocked-dates`, {
         params: {
-          year: currentYearInNumberFormat,
-          month: currentMonthInNumberFormat,
+          year: currentDate.get('year'),
+          month: currentDate.get('month') + 1,
         },
       })
 
@@ -82,6 +80,10 @@ export function Calendar({ selectedDate, onDateSelected }: CalendarProps) {
   })
 
   const calendarWeeks = useMemo(() => {
+    if (!blockedDates) {
+      return []
+    }
+
     const daysInMonthArray = Array.from({
       length: currentDate.daysInMonth(),
     }).map((_, i) => {
@@ -115,7 +117,8 @@ export function Calendar({ selectedDate, onDateSelected }: CalendarProps) {
       ...daysInMonthArray.map((date) => {
         const isDateDisabled =
           date.endOf('day').isBefore(new Date()) ||
-          !!blockedDates?.blockedWeekDays?.includes(date.get('day'))
+          blockedDates?.blockedWeekDays.includes(date.get('day')) ||
+          blockedDates?.blockedDates.includes(date.get('date'))
 
         return {
           date,
