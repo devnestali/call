@@ -1,12 +1,12 @@
 /* eslint-disable camelcase */
-import { prisma } from '@/lib/prisma'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { prisma } from '../../../../lib/prisma'
 
 dayjs.extend(utc)
 
-export default async function handle(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
@@ -18,7 +18,9 @@ export default async function handle(
   const { date, timezoneOffset } = req.query
 
   if (!date || !timezoneOffset) {
-    return res.status(400).json({ message: 'Date was not provided.' })
+    return res
+      .status(400)
+      .json({ message: 'Date or timezoneOffset not provided.' })
   }
 
   const user = await prisma.user.findUnique({
@@ -39,11 +41,11 @@ export default async function handle(
       ? Number(timezoneOffset) / 60
       : Number(timezoneOffset[0]) / 60
 
-  const referenceDateTimezoneOffsetInHours =
+  const referenceDateTimeZoneOffsetInHours =
     referenceDate.toDate().getTimezoneOffset() / 60
 
   if (isPastDate) {
-    return res.json({ availability: [] })
+    return res.json({ possibleTimes: [], availableTimes: [] })
   }
 
   const userAvailability = await prisma.userTimeInterval.findFirst({
@@ -54,7 +56,7 @@ export default async function handle(
   })
 
   if (!userAvailability) {
-    return res.json({ availability: [] })
+    return res.json({ possibleTimes: [], availableTimes: [] })
   }
 
   const { time_start_in_minutes, time_end_in_minutes } = userAvailability
@@ -89,17 +91,16 @@ export default async function handle(
 
   const availableTimes = possibleTimes.filter((time) => {
     const isTimeBlocked = blockedTimes.some(
-      (blockedTime) => blockedTime.date.getUTCHours() === time,
+      (blockedTime) =>
+        blockedTime.date.getUTCHours() - timezoneOffsetInHours === time,
     )
 
-    const isTimePast = referenceDate
+    const isTimeInPast = referenceDate
       .set('hour', time)
-      .subtract(referenceDateTimezoneOffsetInHours, 'hours')
-      .isBefore(
-        dayjs().utc().subtract(referenceDateTimezoneOffsetInHours, 'hours'),
-      )
+      .subtract(referenceDateTimeZoneOffsetInHours, 'hours')
+      .isBefore(dayjs().utc().subtract(timezoneOffsetInHours, 'hours'))
 
-    return !isTimeBlocked && !isTimePast
+    return !isTimeBlocked && !isTimeInPast
   })
 
   return res.json({ possibleTimes, availableTimes })
