@@ -18,6 +18,7 @@ import { getServerSession } from 'next-auth'
 import { buildNextAuthOptions } from '@/pages/api/auth/[...nextauth].api'
 import { api } from '@/lib/axios'
 import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 
 const updateProfileSchema = z.object({
   bio: z.string(),
@@ -46,37 +47,45 @@ export default function UpdateProfile() {
   }
 
   return (
-    <Container>
-      <Header>
-        <Heading as="strong">Bienvenido al Call!</Heading>
-        <Text>
-          Necesitamos de algunas informaciones para crear su perfil! Puedes
-          editarlas mas tarde.
-        </Text>
-        <MultiStep size={4} currentStep={4} />
-      </Header>
+    <>
+      <NextSeo
+        title="Actualize su perfil | Call"
+        description="Necesitamos de algunas informaciones para crear su perfil! Puedes
+            editarlas mas tarde."
+        noindex
+      />
+      <Container>
+        <Header>
+          <Heading as="strong">Bienvenido al Call!</Heading>
+          <Text>
+            Necesitamos de algunas informaciones para crear su perfil! Puedes
+            editarlas mas tarde.
+          </Text>
+          <MultiStep size={4} currentStep={4} />
+        </Header>
 
-      <ProfileBox as="form" onSubmit={handleSubmit(handleUpdateProfile)}>
-        <label>
-          <Text size="sm">Foto de perfil</Text>
-          {/* @ts-expect-error: the src prop exists on Avatar component */}
-          <Avatar src={session.data?.user.avatar_url} alt="" />
-        </label>
+        <ProfileBox as="form" onSubmit={handleSubmit(handleUpdateProfile)}>
+          <label>
+            <Text size="sm">Foto de perfil</Text>
+            {/* @ts-expect-error: the src prop exists on Avatar component */}
+            <Avatar src={session.data?.user.avatar_url} alt="" />
+          </label>
 
-        <label>
-          <Text size="sm">Sobre ti</Text>
-          <TextArea {...register('bio')} />
-          <FormAnnotation size="sm">
-            Hablé un poco sobre ti. Esto será exhibido en su perfil personal.
-          </FormAnnotation>
-        </label>
+          <label>
+            <Text size="sm">Sobre ti</Text>
+            <TextArea {...register('bio')} />
+            <FormAnnotation size="sm">
+              Hablé un poco sobre ti. Esto será exhibido en su perfil personal.
+            </FormAnnotation>
+          </label>
 
-        <Button type="submit" disabled={isSubmitting}>
-          Finalizar
-          <ArrowRight />
-        </Button>
-      </ProfileBox>
-    </Container>
+          <Button type="submit" disabled={isSubmitting}>
+            Finalizar
+            <ArrowRight />
+          </Button>
+        </ProfileBox>
+      </Container>
+    </>
   )
 }
 

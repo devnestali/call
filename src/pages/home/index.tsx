@@ -4,29 +4,37 @@ import Image from 'next/image'
 
 import previewImage from '../../assets/calendarImage.png'
 import { ClaimUsernameForm } from './components/ClaimUsernameForm'
+import { NextSeo } from 'next-seo'
 
 export default function Home() {
   return (
-    <Container>
-      <Hero>
-        <Heading size="4xl">Programación Descomplicada</Heading>
-        <Text size="xl">
-          Conecte su calendario y permita que las personas reserven citas cuando
-          lo deseen.
-        </Text>
+    <>
+      <NextSeo
+        title="Simplifica tu horario | Call"
+        description="Conecte su calendario y permita que las personas reserven citas
+            cuando lo deseen."
+      />
+      <Container>
+        <Hero>
+          <Heading size="4xl">Programación Descomplicada</Heading>
+          <Text size="xl">
+            Conecte su calendario y permita que las personas reserven citas
+            cuando lo deseen.
+          </Text>
 
-        <ClaimUsernameForm />
-      </Hero>
+          <ClaimUsernameForm />
+        </Hero>
 
-      <Preview>
-        <Image
-          src={previewImage}
-          height={400}
-          quality={100}
-          priority
-          alt="Calendario que simboliza aplicación en funcionamiento"
-        />
-      </Preview>
-    </Container>
+        <Preview>
+          <Image
+            src={previewImage}
+            height={400}
+            quality={100}
+            priority
+            alt="Calendario que simboliza aplicación en funcionamiento"
+          />
+        </Preview>
+      </Container>
+    </>
   )
 }
