@@ -2,6 +2,8 @@
 
 Call is a Nextjs website that allows you to create an account and, necessarily, link your Google account to access and manage your Google Calendar. The platform displays your available and unavailable times, and when you create an appointment, it automatically registers it in Google Calendar, informs who will attend, and schedules a Google Meet meeting. The invitee receives a confirmation email, and the user also has an interface to edit their bio and manage their account.
 
+##### 🌟 [Access the website now!!](https://call-six-dusky.vercel.app/)
+
 **⚠️ Attention!! This website was created using an [Design System](https://github.com/devnestali/design-system) created by me. This is a [NPM Link](https://libraries.io/npm/@devnestali-call-ui%2Freact) to access. I hope you enjoy :)**
 
 ## 🤖 PROTOTYPE
